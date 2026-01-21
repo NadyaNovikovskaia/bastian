@@ -37,7 +37,11 @@
 
         gtag('js', new Date());
 
-        gtag('config', 'G-99MHLJW6TW');
+        gtag('config', 'G-99MHLJW6TW', {
+            'send_page_view': true
+        });
+        
+        console.log('📊 Stranger Things - Google Analytics initialized: G-99MHLJW6TW');
     </script>
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">     (function (m, e, t, r, i, k, a) {
@@ -87,14 +91,8 @@
             adventure in Rome, Georgia.
         </p>
         <div class="hero-buttons">
-            <a href="#buy" class="btn btn-primary" onclick="gtag('event', 'click', {
-       'event_category': 'Buy top',
-       'event_label': 'Buy click on top'
-   });">Get the Tour Map — $0.99</a>
-            <a href="#locations" class="btn btn-outline" onclick="gtag('event', 'click', {
-       'event_category': 'Preview Locations',
-       'event_label': 'Preview Locations click'
-   });">Preview Locations</a>
+            <a href="#buy" class="btn btn-primary" id="hero-buy-btn">Get the Tour Map — $0.99</a>
+            <a href="#locations" class="btn btn-outline" id="hero-preview-btn">Preview Locations</a>
         </div>
         <p class="hero-note">Instant digital download • Google Maps pins included</p>
     </div>

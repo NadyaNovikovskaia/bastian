@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Test - Stranger Things</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        .test-section {
+            background: #1a1a1a;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #ff0000;
+        }
+        h1 {
+            color: #ff0000;
+            text-align: center;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+            background: transparent;
+            color: #ff0000;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #ff0000;
+            color: #000;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: #0f5132; color: #d1e7dd; border: 1px solid #0f5132; }
+        .error { background: #842029; color: #f8d7da; border: 1px solid #842029; }
+        .info { background: #055160; color: #cff4fc; border: 1px solid #055160; }
+        #console {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #00ff00;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid #003300;
+        }
+        .warning { color: #ffaa00; }
+    </style>
+
+    <!--  Clarity lilia.ftor  -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () {
+                (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.async = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "v51pbngtlm");
+    </script>
+
+    <!-- Google tag (gtag.js) - STRANGER THINGS -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-99MHLJW6TW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-99MHLJW6TW', {
+            'send_page_view': true
+        });
+        
+        // Log to custom console
+        window.logToConsole = function(message, level = 'info') {
+            const consoleDiv = document.getElementById('console');
+            if (consoleDiv) {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry' + (level === 'warn' ? ' warning' : '');
+                entry.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+                consoleDiv.appendChild(entry);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+            console.log(message);
+        };
+    </script>
+</head>
+<body>
+    <h1>🔴 STRANGER THINGS - Analytics Testing</h1>
+
+    <div class="test-section">
+        <h2>Status Check</h2>
+        <div id="ga-status" class="status info">Checking Google Analytics...</div>
+        <div id="clarity-status" class="status info">Checking Microsoft Clarity...</div>
+        <div class="status info">
+            <strong>Measurement ID:</strong> G-99MHLJW6TW<br>
+            <strong>Clarity Project:</strong> v51pbngtlm
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Events (All prefixed with "stranger_things_")</h2>
+        <p>Click the buttons below to test event tracking:</p>
+        
+        <button onclick="testBuyButton()">🛒 Test Buy Button Event</button>
+        <button onclick="testPreviewButton()">👁️ Test Preview Locations Event</button>
+        <button onclick="testScrollEvent()">📜 Test Scroll Depth Event</button>
+        <button onclick="testLocationView()">📍 Test Location Card View</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Event Console</h2>
+        <div id="console"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Instructions</h2>
+        <ol>
+            <li>Open Browser DevTools (F12) → Console tab</li>
+            <li>Click the test buttons above</li>
+            <li>All events have <strong>"stranger_things_"</strong> prefix</li>
+            <li>Go to Google Analytics → Realtime → Events</li>
+            <li>Filter by "stranger_things" to see only ST events</li>
+            <li>Check Clarity Dashboard for session recordings</li>
+        </ol>
+        
+        <h3>Events Being Tracked:</h3>
+        <ul>
+            <li><code>stranger_things_buy_button_click</code> - Buy button clicks</li>
+            <li><code>stranger_things_preview_locations_click</code> - Preview button clicks</li>
+            <li><code>stranger_things_stripe_buy_button_click</code> - Stripe checkout clicks</li>
+            <li><code>stranger_things_location_card_viewed</code> - Location card views</li>
+            <li><code>stranger_things_cta_section_viewed</code> - CTA section views</li>
+            <li><code>stranger_things_scroll_depth</code> - Scroll depth (25%, 50%, 75%, 100%)</li>
+            <li><code>stranger_things_footer_link_click</code> - Footer link clicks</li>
+        </ul>
+    </div>
+
+    <script>
+        // Check Analytics Status
+        setTimeout(() => {
+            const gaStatus = document.getElementById('ga-status');
+            const clarityStatus = document.getElementById('clarity-status');
+            
+            if (typeof gtag !== 'undefined') {
+                gaStatus.className = 'status success';
+                gaStatus.textContent = '✅ Google Analytics is loaded (ID: G-99MHLJW6TW)';
+                logToConsole('✅ Google Analytics loaded for Stranger Things');
+            } else {
+                gaStatus.className = 'status error';
+                gaStatus.textContent = '❌ Google Analytics failed to load';
+                logToConsole('❌ Google Analytics NOT loaded', 'warn');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarityStatus.className = 'status success';
+                clarityStatus.textContent = '✅ Microsoft Clarity is loaded';
+                logToConsole('✅ Clarity loaded for Stranger Things');
+            } else {
+                clarityStatus.className = 'status error';
+                clarityStatus.textContent = '❌ Microsoft Clarity failed to load';
+                logToConsole('❌ Clarity NOT loaded', 'warn');
+            }
+        }, 2000);
+
+        // Test Functions
+        function testBuyButton() {
+            const eventData = {
+                button_text: 'Get the Tour Map — $0.99',
+                button_location: 'hero_section',
+                button_type: 'primary'
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'stranger_things_buy_button_click', eventData);
+                logToConsole('✅ GA: stranger_things_buy_button_click sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available', 'warn');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'stranger_things_buy_button_click');
+                logToConsole('✅ Clarity: stranger_things_buy_button_click sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available', 'warn');
+            }
+        }
+
+        function testPreviewButton() {
+            const eventData = {
+                button_text: 'Preview Locations',
+                button_location: 'hero_section',
+                button_type: 'outline'
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'stranger_things_preview_locations_click', eventData);
+                logToConsole('✅ GA: stranger_things_preview_locations_click sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available', 'warn');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'stranger_things_preview_locations_click');
+                logToConsole('✅ Clarity: stranger_things_preview_locations_click sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available', 'warn');
+            }
+        }
+
+        function testScrollEvent() {
+            const eventData = {
+                depth_percent: '50',
+                page_section: 'test_section'
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'stranger_things_scroll_depth', eventData);
+                logToConsole('✅ GA: stranger_things_scroll_depth sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available', 'warn');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'stranger_things_scroll_depth');
+                logToConsole('✅ Clarity: stranger_things_scroll_depth sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available', 'warn');
+            }
+        }
+
+        function testLocationView() {
+            const eventData = {
+                location_name: 'Creel House',
+                location_number: 1,
+                is_highlight: true
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'stranger_things_location_card_viewed', eventData);
+                logToConsole('✅ GA: stranger_things_location_card_viewed sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available', 'warn');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'stranger_things_location_card_viewed');
+                logToConsole('✅ Clarity: stranger_things_location_card_viewed sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available', 'warn');
+            }
+        }
+
+        // Log page load
+        logToConsole('🔴 Stranger Things Test Page loaded at ' + new Date().toLocaleString());
+        logToConsole('🔍 Waiting 2 seconds to check analytics...');
+        logToConsole('⚠️ All events are prefixed with "stranger_things_"', 'warn');
+    </script>
+</body>
+</html>
