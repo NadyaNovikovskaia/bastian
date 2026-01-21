@@ -4,11 +4,39 @@ let currentSlide = 0;
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
-    initializeCarousel();
-    initializeTabSwitching();
-    initializeCTAButtons();
-    initializeEventTracking();
+    // Wait for analytics to load
+    setTimeout(() => {
+        initializeAnalytics();
+        initializeCarousel();
+        initializeTabSwitching();
+        initializeCTAButtons();
+        initializeEventTracking();
+    }, 500);
 });
+
+// Initialize Analytics
+function initializeAnalytics() {
+    console.log('🔧 Initializing Analytics...');
+    
+    // Check if gtag is available
+    if (typeof gtag !== 'undefined') {
+        console.log('✅ Google Analytics loaded');
+        // Send initial page view with measurement ID
+        gtag('config', 'G-9NB21PKL88', {
+            'page_title': document.title,
+            'page_path': window.location.pathname
+        });
+    } else {
+        console.error('❌ Google Analytics (gtag) not loaded');
+    }
+    
+    // Check if Clarity is available
+    if (typeof clarity !== 'undefined') {
+        console.log('✅ Microsoft Clarity loaded');
+    } else {
+        console.error('❌ Microsoft Clarity not loaded');
+    }
+}
 
 // ===== CAROUSEL FUNCTIONS =====
 function initializeCarousel() {
@@ -232,22 +260,49 @@ function trackEvent(eventName, eventParams = {}) {
     // Send to Google Analytics
     if (typeof gtag !== 'undefined') {
         gtag('event', eventName, eventParams);
-        console.log('GA Event:', eventName, eventParams);
+        console.log('✅ GA Event sent:', eventName, eventParams);
+    } else {
+        console.warn('⚠️ gtag is not defined yet');
+        // Retry after a delay if gtag is not ready
+        setTimeout(() => {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, eventParams);
+                console.log('✅ GA Event sent (delayed):', eventName, eventParams);
+            } else {
+                console.error('❌ gtag failed to load');
+            }
+        }, 1000);
     }
     
-    // Send to Clarity (custom tags)
+    // Send to Clarity as custom event
     if (typeof clarity !== 'undefined') {
-        clarity('set', eventName, JSON.stringify(eventParams));
-        console.log('Clarity Event:', eventName, eventParams);
+        // Use clarity's event method
+        clarity('event', eventName);
+        console.log('✅ Clarity Event sent:', eventName);
+    } else {
+        console.warn('⚠️ Clarity is not defined yet');
+        // Retry after a delay if Clarity is not ready
+        setTimeout(() => {
+            if (typeof clarity !== 'undefined') {
+                clarity('event', eventName);
+                console.log('✅ Clarity Event sent (delayed):', eventName);
+            } else {
+                console.error('❌ Clarity failed to load');
+            }
+        }, 1000);
     }
 }
 
 // Track page view
 function trackPageView() {
-    trackEvent('page_view', {
-        page_title: document.title,
-        page_location: window.location.href
-    });
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href,
+            page_path: window.location.pathname
+        });
+        console.log('✅ Page view tracked');
+    }
 }
 
 // ===== EVENT TRACKING INITIALIZATION =====

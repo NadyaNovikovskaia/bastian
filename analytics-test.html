@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Test - Bastian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 24px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #6B4CE6;
+            color: white;
+        }
+        button:hover {
+            background: #5a3dc4;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        #console {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid #333;
+        }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9NB21PKL88"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-9NB21PKL88', {
+            'send_page_view': true
+        });
+        
+        // Log to custom console
+        window.logToConsole = function(message) {
+            const consoleDiv = document.getElementById('console');
+            if (consoleDiv) {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+                consoleDiv.appendChild(entry);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+            console.log(message);
+        };
+    </script>
+
+    <!-- MS Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "v51aiaw6lm");
+    </script>
+</head>
+<body>
+    <h1>🧪 Analytics Testing Page</h1>
+
+    <div class="test-section">
+        <h2>Status Check</h2>
+        <div id="ga-status" class="status info">Checking Google Analytics...</div>
+        <div id="clarity-status" class="status info">Checking Microsoft Clarity...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Events</h2>
+        <p>Click the buttons below to test event tracking:</p>
+        
+        <button onclick="testBuyButton()">Test Buy Button Event</button>
+        <button onclick="testDownloadButton()">Test Download Button Event</button>
+        <button onclick="testCustomEvent()">Test Custom Event</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Event Console</h2>
+        <div id="console"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Instructions</h2>
+        <ol>
+            <li>Open Browser DevTools (F12) → Console tab</li>
+            <li>Click the test buttons above</li>
+            <li>Check this page's console and browser console for logs</li>
+            <li>Go to Google Analytics → Realtime → Events to see events</li>
+            <li>Go to Clarity Dashboard → Recordings to see sessions</li>
+        </ol>
+    </div>
+
+    <script>
+        // Check Analytics Status
+        setTimeout(() => {
+            const gaStatus = document.getElementById('ga-status');
+            const clarityStatus = document.getElementById('clarity-status');
+            
+            if (typeof gtag !== 'undefined') {
+                gaStatus.className = 'status success';
+                gaStatus.textContent = '✅ Google Analytics is loaded (ID: G-9NB21PKL88)';
+                logToConsole('✅ Google Analytics loaded');
+            } else {
+                gaStatus.className = 'status error';
+                gaStatus.textContent = '❌ Google Analytics failed to load';
+                logToConsole('❌ Google Analytics NOT loaded');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarityStatus.className = 'status success';
+                clarityStatus.textContent = '✅ Microsoft Clarity is loaded';
+                logToConsole('✅ Clarity loaded');
+            } else {
+                clarityStatus.className = 'status error';
+                clarityStatus.textContent = '❌ Microsoft Clarity failed to load';
+                logToConsole('❌ Clarity NOT loaded');
+            }
+        }, 2000);
+
+        // Test Functions
+        function testBuyButton() {
+            const eventData = {
+                button_text: 'Buy Full Tour - $7',
+                guide_name: 'Test Guide',
+                button_location: 'test_page'
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'buy_button_click', eventData);
+                logToConsole('✅ GA: buy_button_click sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'buy_button_click');
+                logToConsole('✅ Clarity: buy_button_click sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available');
+            }
+        }
+
+        function testDownloadButton() {
+            const eventData = {
+                button_text: 'Download App',
+                button_location: 'test_page'
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'download_button_click', eventData);
+                logToConsole('✅ GA: download_button_click sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'download_button_click');
+                logToConsole('✅ Clarity: download_button_click sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available');
+            }
+        }
+
+        function testCustomEvent() {
+            const eventData = {
+                test_parameter: 'test_value',
+                timestamp: Date.now()
+            };
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'custom_test_event', eventData);
+                logToConsole('✅ GA: custom_test_event sent with data: ' + JSON.stringify(eventData));
+            } else {
+                logToConsole('❌ GA: gtag not available');
+            }
+            
+            if (typeof clarity !== 'undefined') {
+                clarity('event', 'custom_test_event');
+                logToConsole('✅ Clarity: custom_test_event sent');
+            } else {
+                logToConsole('❌ Clarity: clarity not available');
+            }
+        }
+
+        // Log page load
+        logToConsole('📄 Page loaded at ' + new Date().toLocaleString());
+        logToConsole('🔍 Waiting 2 seconds to check analytics...');
+    </script>
+</body>
+</html>
