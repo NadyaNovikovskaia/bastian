@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-item {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #6B4CE6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5538D9;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Audio Files Test</h1>
+    <p>This page tests if audio files are loading correctly.</p>
+
+    <div class="test-item">
+        <h3>1. Sex and the City</h3>
+        <audio controls>
+            <source src="audio/Carrie Bradshaw's apartment stoop Perry Street.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="status" id="status1">Status: Waiting...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>2. Friends</h3>
+        <audio controls>
+            <source src="audio/Friends — 90 Bedford Street (corner of Bedford St & Grove St), West Village, Manhattan, New York, NY 10014.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="status" id="status2">Status: Waiting...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>3. The Devil Wears Prada</h3>
+        <audio controls>
+            <source src="audio/The Devil Wears Prada — 1221 Avenue of the Americas (McGraw‑Hill Building), 1221 6th Ave, New York, NY 10020.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="status" id="status3">Status: Waiting...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>4. Stranger Things</h3>
+        <audio controls>
+            <source src="audio/Stranger Things — Gwinnett Place Mall (Starcourt Mall), 2100 Pleasant Hill Road, Duluth, GA 30096.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="status" id="status4">Status: Waiting...</div>
+    </div>
+
+    <div class="test-item">
+        <h3>5. Twin Peaks</h3>
+        <audio controls>
+            <source src="audio/Twin Peaks — Salish Lodge & Spa : Snoqualmie Falls, 6501 Railroad Ave, Snoqualmie, WA 98065.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="status" id="status5">Status: Waiting...</div>
+    </div>
+
+    <script>
+        const audioElements = document.querySelectorAll('audio');
+        
+        audioElements.forEach((audio, index) => {
+            const statusDiv = document.getElementById(`status${index + 1}`);
+            
+            audio.addEventListener('loadeddata', () => {
+                statusDiv.textContent = `✅ Status: Loaded successfully (Duration: ${Math.round(audio.duration)}s)`;
+                statusDiv.style.background = '#d4edda';
+            });
+            
+            audio.addEventListener('error', (e) => {
+                statusDiv.textContent = `❌ Status: Error loading file`;
+                statusDiv.style.background = '#f8d7da';
+                console.error('Audio error:', e);
+            });
+            
+            audio.addEventListener('canplay', () => {
+                console.log('Can play:', audio.src);
+            });
+        });
+
+        console.log('Audio test page loaded');
+    </script>
+</body>
+</html>
