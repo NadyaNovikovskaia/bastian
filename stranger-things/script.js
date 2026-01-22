@@ -40,29 +40,12 @@ function trackEvent(eventName, eventParams = {}) {
     }
 }
 
-// Initialize Analytics
+// ===== INITIAL ANALYTICS =====
 function initializeAnalytics() {
     console.log('🔧 Initializing Stranger Things Analytics...');
-    
-    // Check if gtag is available
-    if (typeof gtag !== 'undefined') {
-        console.log('✅ Google Analytics loaded (ST ID: G-99MHLJW6TW)');
-    } else {
-        console.error('❌ Google Analytics (gtag) not loaded');
-    }
-    
-    // Check if Clarity is available
-    if (typeof clarity !== 'undefined') {
-        console.log('✅ Microsoft Clarity loaded (ST Project)');
-    } else {
-        console.error('❌ Microsoft Clarity not loaded');
-    }
-    
-    // Track initial page view
     trackPageView();
 }
 
-// Track page view
 function trackPageView() {
     if (typeof gtag !== 'undefined') {
         gtag('event', 'page_view', {
@@ -74,72 +57,58 @@ function trackPageView() {
     }
 }
 
-// ===== EVENT TRACKING INITIALIZATION =====
+// ===== EVENT TRACKING =====
 function initializeEventTracking() {
-    // Track hero buttons
     trackHeroButtons();
-    
-    // Track CTA section
     trackCTASection();
-    
-    // Track footer links
     trackFooterLinks();
-    
-    // Track location cards
     trackLocationCards();
-    
-    // Track Stripe button
     trackStripeButton();
+    trackFooterBuyButton();
+    trackExploreLocationsButton();
+    trackQRCode();
 }
 
-// Track Hero Section Buttons
+// --- Hero Buttons ---
 function trackHeroButtons() {
-    // Buy button in hero
     const heroBuyBtn = document.getElementById('hero-buy-btn');
     if (heroBuyBtn) {
-        heroBuyBtn.addEventListener('click', function(e) {
-            trackEvent('buy_button_click', {
+        heroBuyBtn.addEventListener('click', function() {
+            trackEvent('scroll_to_buy', {
                 button_text: this.textContent.trim(),
-                button_location: 'hero_section',
-                button_type: 'primary'
+                button_location: 'hero_section'
             });
         });
     }
-    
-    // Preview Locations button
+
     const heroPreviewBtn = document.getElementById('hero-preview-btn');
     if (heroPreviewBtn) {
-        heroPreviewBtn.addEventListener('click', function(e) {
-            trackEvent('preview_locations_click', {
+        heroPreviewBtn.addEventListener('click', function() {
+            trackEvent('scroll_to_locations', {
                 button_text: this.textContent.trim(),
-                button_location: 'hero_section',
-                button_type: 'outline'
+                button_location: 'hero_section'
             });
         });
     }
 }
 
-// Track CTA Section
+// --- CTA Section ---
 function trackCTASection() {
-    // Monitor when CTA section becomes visible
     const ctaSection = document.querySelector('.cta');
     if (ctaSection) {
-        const ctaObserver = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    trackEvent('cta_section_viewed', {
-                        section_name: 'Enter the Upside Down CTA'
-                    });
-                    ctaObserver.unobserve(entry.target);
+                    trackEvent('cta_section_viewed', {section_name: 'Enter the Upside Down CTA'});
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.5 });
-        
-        ctaObserver.observe(ctaSection);
+        observer.observe(ctaSection);
     }
 }
 
-// Track Stripe Buy Button
+// --- Stripe Button (Middle of Page) ---
 function trackStripeButton() {
    const wrapper = document.getElementById('stripe-buy-button-wrapper');
     if (!wrapper) return;
@@ -152,32 +121,62 @@ function trackStripeButton() {
         if (tracked) return;
         tracked = true;
 
-        if (typeof trackEvent === 'function') {
           trackEvent('begin_checkout', {
             button_text: 'Get the Tour Map',
-            button_location: 'cta_section',
-            value: 0.99,
+            button_location: 'middle',
+            value: 8.49,
             currency: 'USD',
             provider: 'stripe'
           });
-        } else if (typeof gtag === 'function') {
-          gtag('event', 'begin_checkout', {
-            value: 0.99,
-            currency: 'USD',
-            payment_method: 'stripe'
-          });
-        }
-      },
-      { passive: true }
-    );
+    }, { passive: true });
 }
 
-// Track Footer Links
+// --- Footer Buy Button ---
+function trackFooterBuyButton() {
+    const bottomBuyBtn = document.getElementById('footer-buy-btn');
+    if (bottomBuyBtn) {
+        bottomBuyBtn.addEventListener('click', function() {
+            trackEvent('begin_checkout', {
+                button_text: this.textContent.trim(),
+                button_location: 'footer',
+            value: 8.49,
+            currency: 'USD',
+                provider: 'stripe'
+            });
+          });
+        }
+}
+
+// --- Explore Locations Button ---
+function trackExploreLocationsButton() {
+    const exploreBtn = document.getElementById('hero-preview-btn');
+    const locationsSection = document.getElementById('locations-section');
+    if (exploreBtn && locationsSection) {
+        exploreBtn.addEventListener('click', function() {
+            locationsSection.scrollIntoView({behavior: 'smooth'});
+            trackEvent('scroll_to_locations', {button_text: this.textContent.trim(), button_location: 'hero_section'});
+        });
+    }
+}
+
+// --- QR Code Tracking ---
+function trackQRCode() {
+    const qrCode = document.getElementById('qr-code');
+    if (qrCode && window.innerWidth >= 1024) {
+        trackEvent('qr_displayed', {screen: 'desktop'});
+
+        setTimeout(() => {
+            trackEvent('qr_seen', {screen: 'desktop'});
+        }, 3000);
+    }
+}
+
+// --- Footer Links ---
 function trackFooterLinks() {
     const footerLinks = document.querySelectorAll('.footer a');
     
     footerLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function() {
             trackEvent('footer_link_click', {
                 link_text: this.textContent.trim(),
                 link_href: this.getAttribute('href')
@@ -186,13 +185,12 @@ function trackFooterLinks() {
     });
 }
 
-// Track Location Cards
+// --- Location Cards ---
 function trackLocationCards() {
     const locationCards = document.querySelectorAll('.location-card');
     
     locationCards.forEach((card, index) => {
-        // Track when location cards come into view
-        const cardObserver = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const locationTitle = card.querySelector('.location-title')?.textContent || 'Unknown';
@@ -201,16 +199,15 @@ function trackLocationCards() {
                         location_number: index + 1,
                         is_highlight: card.classList.contains('highlight')
                     });
-                    cardObserver.unobserve(entry.target);
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.5 });
-        
-        cardObserver.observe(card);
+        observer.observe(card);
     });
 }
 
-// Track scroll depth
+// --- Scroll Depth Tracking ---
 let maxScrollDepth = 0;
 let scrollTracked = {
     '25': false,
@@ -220,16 +217,13 @@ let scrollTracked = {
 };
 
 function trackScrollDepth() {
+    const scrollTop = window.scrollY;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight - windowHeight;
-    const scrollTop = window.scrollY;
     const scrollPercent = Math.round((scrollTop / documentHeight) * 100);
     
-    if (scrollPercent > maxScrollDepth) {
-        maxScrollDepth = scrollPercent;
-    }
-    
-    // Track milestone scroll depths
+    if (scrollPercent > maxScrollDepth) maxScrollDepth = scrollPercent;
+
     ['25', '50', '75', '100'].forEach(milestone => {
         const milestoneNum = parseInt(milestone);
         if (scrollPercent >= milestoneNum && !scrollTracked[milestone]) {
@@ -258,46 +252,29 @@ function getCurrentSection() {
     return 'unknown';
 }
 
-// Add scroll listener with throttle
 let scrollTimeout;
 window.addEventListener('scroll', () => {
-    if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-    }
+    if (scrollTimeout) clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(trackScrollDepth, 100);
 });
 
-// ===== ORIGINAL FUNCTIONALITY =====
-
-// Smooth scroll for anchor links
+// --- Smooth Scroll for Anchors ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+        if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
     });
 });
 
-// Intersection Observer for fade-in animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
+// --- Intersection Observer for Section Animations ---
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
     });
 }, observerOptions);
 
-// Observe all sections for scroll animations
 document.querySelectorAll('section').forEach(section => {
     section.style.opacity = '0';
     section.style.transform = 'translateY(30px)';
@@ -305,7 +282,6 @@ document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
 });
 
-// Add visible class styles
 const style = document.createElement('style');
 style.textContent = `
   section.visible {
@@ -319,13 +295,12 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Console easter egg for Stranger Things fans
+// --- Console Easter Egg ---
 console.log('%c🔴 Welcome to the Upside Down...', 'color: #ff0000; font-size: 20px; font-weight: bold;');
 console.log('%cHawkins Horror Day - A Stranger Things Fan Experience', 'color: #999; font-size: 12px;');
 
 // ===== INITIALIZE EVERYTHING =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for analytics to load
     setTimeout(() => {
         initializeAnalytics();
         initializeEventTracking();
