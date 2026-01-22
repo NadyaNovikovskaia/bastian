@@ -532,6 +532,17 @@ h1, h2, h3, .font-display {
   margin: 0 auto 32px;
 }
 
+.qr-code.tablet-only {
+  display: none;
+}
+
+/* Display the image only in tablet view (e.g., 768px to 1024px) */
+@media (min-width: 768px) {
+  .qr-code.tablet-only {
+    display: block;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-buttons {
