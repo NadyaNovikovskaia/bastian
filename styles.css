@@ -19,11 +19,11 @@
     --bg-white: #FFFFFF;
     --border-color: #E0E0E0;
     --sponsored-color: #FFA726;
-    
+
     /* Typography */
     --font-serif: 'Playfair Display', serif;
     --font-sans: 'Inter', sans-serif;
-    
+
     /* Spacing */
     --spacing-xs: 8px;
     --spacing-sm: 16px;
@@ -31,12 +31,12 @@
     --spacing-lg: 48px;
     --spacing-xl: 64px;
     --spacing-xxl: 96px;
-    
+
     /* Shadows */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -431,13 +431,23 @@ h3 {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
 }
 
 @keyframes fadeInUp {
@@ -481,10 +491,10 @@ h3 {
 }
 
 @keyframes highlightGuide {
-    0%, 100% { 
+    0%, 100% {
         transform: scale(1);
     }
-    50% { 
+    50% {
         transform: scale(1.02);
     }
 }
@@ -565,6 +575,13 @@ h3 {
 .btn-buy:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
+}
+
+.buy-button-container {
+    padding: 0 5px 0 0;
+    background: var(--primary-color);
+    border-radius: var(--radius-md);
+    text-align: center;
 }
 
 /* ===== FEATURES SECTION ===== */
@@ -778,11 +795,11 @@ h3 {
 }
 
 @keyframes priceHighlight {
-    0%, 100% { 
+    0%, 100% {
         transform: scale(1);
         opacity: 1;
     }
-    50% { 
+    50% {
         transform: scale(1.05);
         opacity: 0.9;
     }
@@ -1017,41 +1034,41 @@ h3 {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
     }
-    
+
     .hero-visual {
         height: 400px;
     }
-    
+
     .app-carousel {
         max-width: 300px;
         height: 500px;
     }
-    
+
     .carousel-btn.prev {
         left: -15px;
     }
-    
+
     .carousel-btn.next {
         right: -15px;
     }
-    
+
     .guides-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .features-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .reviews-carousel {
         padding: 0 40px;
     }
-    
+
     .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-md);
     }
-    
+
     .nav-links a:not(:last-child) {
         display: none;
     }
@@ -1062,80 +1079,80 @@ h3 {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .hero-cta button {
         width: 100%;
     }
-    
+
     .hero-cta .btn-primary,
     .hero-cta .btn-secondary {
         padding: 16px 24px;
         font-size: 1rem;
     }
-    
+
     .story-titles {
         gap: var(--spacing-xs);
     }
-    
+
     .story-title-card {
         padding: var(--spacing-sm);
     }
-    
+
     .story-icon {
         font-size: 1.5rem;
     }
-    
+
     .story-name {
         font-size: 1rem;
     }
-    
+
     .app-carousel {
         max-width: 280px;
         height: 450px;
     }
-    
+
     .carousel-btn {
         width: 40px;
         height: 40px;
         font-size: 1.5rem;
     }
-    
+
     .guides-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .price-comparison {
         flex-direction: column;
         gap: var(--spacing-md);
     }
-    
+
     .price-text-comparison {
         font-size: 2rem;
         margin: var(--spacing-sm) 0;
     }
-    
+
     .vs-text {
         display: block;
         margin: var(--spacing-xs) 0;
     }
-    
+
     .reviews-carousel {
         padding: 0 20px;
     }
-    
+
     .carousel-btn {
         width: 35px;
         height: 35px;
     }
-    
+
     .footer-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .cta-buttons {
         flex-direction: column;
     }
-    
+
     .btn-download {
         width: 100%;
     }

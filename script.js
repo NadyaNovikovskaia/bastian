@@ -335,6 +335,9 @@ function trackBuyButtons() {
     
     buyButtons.forEach(button => {
         button.addEventListener('click', function() {
+            const paymentUrl = button.dataset.paymentLink;
+            if (!paymentUrl) return;
+
             // Get guide name from parent card
             const guideCard = this.closest('.guide-card');
             let guideName = 'Unknown';
@@ -349,6 +352,9 @@ function trackBuyButtons() {
                 guide_name: guideName,
                 button_location: guideCard ? 'guide_section' : 'hero_section'
             });
+
+            // 🔗 Открываем Payment Link в новой вкладке
+            window.open(paymentUrl, '_blank');
         });
     });
 }
